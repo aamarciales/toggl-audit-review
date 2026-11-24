@@ -635,21 +635,17 @@ button.filter-pill[aria-pressed=true] { background:var(--wash); border-color:tra
   .finding-title { font-size:var(--type-section); }
 }
 
-/* Use the outer margins first. Task rows keep their space while the inspector toggles. */
+/* The dock occupies the outer gutter first, then only the part of the report it overlaps. */
 @media (min-width:1024px) {
-  #root {
-    --dock-space:calc(var(--finding-width) + var(--panel-inset) + var(--space-6));
-    --center-gutter:max(var(--page-edge), calc((100vw - var(--report-width)) / 2));
-    --report-start:clamp(var(--page-edge), calc(100vw - var(--report-width) - var(--dock-space)), var(--center-gutter));
-    --report-end:calc(2 * var(--center-gutter) - var(--report-start));
-    margin-inline-start:var(--report-start);
-  }
-  .proposal-main:has(.plan-view, .decision-overview) {
-    margin-inline-end:max(0px, calc(var(--dock-space) - var(--report-end)));
+  .plan-list { margin-inline:calc(0px - var(--space-4)); }
+  .proposal-main { margin-inline-end:0; transition:margin-inline-end var(--panel-motion); }
+  body:has(.finding-panel[data-open]) .proposal-main {
+    --outer-gutter:max(var(--page-edge), calc((100vw - var(--report-width)) / 2));
+    margin-inline-end:max(0px, calc(var(--finding-width) + var(--panel-inset) + var(--space-6) - var(--outer-gutter)));
   }
 }
 @media (prefers-reduced-motion:reduce) {
-  .finding-panel,.finding-backdrop { transition:none; }
+  .proposal-main,.finding-panel,.finding-backdrop { transition:none; }
 }
 
 .report-view[data-ending-style] { display:none; }
